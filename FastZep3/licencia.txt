@@ -1,0 +1,13 @@
+Program FastZep sa je poskytovanı na základe modifikovanej EUPL licencie.
+
+Modifikácie:
+1) Autor
+Poskytovate¾om licencie, autorom programu FastZep, je ¼udovít Scholtz.
+http://ludovit.scholtz.sk
+ludovit@scholtz.sk
+2) Rozsah práv udelenıch touto licenciou
+a) Upravi pôvodné dielo a vytvori odvodené dielo zaloené na pôvodnom diele sa umoòuje iba na základe súhlasu autora,
+b) sublicenciou poskytnú práva k dielu alebo jeho rozmnoeninám sa umoòuje iba na základe súhlasu autora,
+c) pouíva zdrojovı kód v inıch aplikáciach sa umoòuje iba na základe súhlasu autora.
+3) Zdrojovı kód
+Zdrojovı kód je moné stiahnu z adresy http://fastzep.scholtz.sk

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="FastZep3">
+</Property><Property Name="Solution File" Value="C:\Users\Ludovit Scholtz\Documents\Visual Studio 2010\Projects\FastZep3\FastZep3.sln">
+</Property><Property Name="Date" Value="31. júla 2011">
+</Property><Property Name="Time" Value="6:33:12">
+</Property></Properties><Event ErrorLevel="0" Project="FastZep3" Source="FastZep3.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="FastZep3" Source="FastZep3.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="FastZep3" Source="FastZep3.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event></UpgradeLog>

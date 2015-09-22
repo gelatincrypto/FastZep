@@ -1,0 +1,4 @@
+eID CSP Error: CPDestroyHash(hHash = 179) Pkcs11Exception: 1598565831
+Chıba dátum.
+eID CSP Error: CPDestroyHash(hHash = 179) Pkcs11Exception: 1634348487
+Podpis neobsahuje algoritmus ktorım sa to má podpísa.
