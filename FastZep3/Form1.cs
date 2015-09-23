@@ -97,41 +97,21 @@ namespace FastZep3
 
             
         }
-        private byte[] getPolicy(bool full, string name) {
-            Assembly ass = Assembly.GetExecutingAssembly();
-            foreach (string s in ass.GetManifestResourceNames())
-            {
-                System.IO.Stream stream = ass.GetManifestResourceStream(s);
-                ResourceManager rm = new ResourceManager(s, Assembly.GetExecutingAssembly());
-                ResourceSet set = new ResourceSet(stream);
-                object obj = null;
-                if (full)
-                {
-                    obj = set.GetObject(name);
-                }
-                else
-                {
-                    obj = set.GetObject(name+"Short");
-                }
-                if (obj != null)
-                {
-                    return (byte[])obj;
-                }
-            }
-
-            if(name =="policy1") return new byte[] { };
-            return getPolicy(full,"policy2");
-        
-        }
         private byte[] getPolicy(bool full) {
-            string politika = "policy1";
+            if (dataGridViewPolitiky.SelectedRows.Count != 1) {
+                throw new Exception("V menu \"Nastavenia>Podpisová politika\" si vyberte podpisovú politiku ktorou chcete podpispovať dokument a stlačte tlačítko uložiť.");
+            }
             try
             {
-                politika = FZRegistry.get("savedPolicy");
+                string id = dataGridViewPolitiky.SelectedRows[0].Cells["id"].Value.ToString() + ".der";
+                byte[] file = Convert.FromBase64String(FZRegistry.get(id));
+                if (full) return file;
+                byte[] policy = createShortPolicy(file, true);
+                return policy;
             }
-            catch { }
-            return getPolicy(full, politika);    
-                        
+            catch (Exception exc) {
+                throw new Exception("Došlo ku chybe spracovania podpisovej politky. " + exc.Message);
+            }
         }
         void bw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
@@ -239,44 +219,30 @@ namespace FastZep3
                     i++;
                     SignedCms signedCms = new SignedCms(SubjectIdentifierType.IssuerAndSerialNumber, contentInfo, !detached);
                     CmsSigner cmsSigner = new CmsSigner(SubjectIdentifierType.IssuerAndSerialNumber, cert);
-                    cmsSigner.SignedAttributes.Add(new Pkcs9SigningTime());
-
-                    cmsSigner.IncludeOption = X509IncludeOption.WholeChain;
-                    //cmsSigner.DigestAlgorithm = new Oid(algoritmus); // sha256 je uz nativne podporovana
-
                     
-                    ESSCertIDv2 cer2 = new ESSCertIDv2(cert);
+                    cmsSigner.SignedAttributes.Add(new Pkcs9SigningTime());
+                    cmsSigner.IncludeOption = X509IncludeOption.WholeChain;
 
+                    ESSCertIDv2 cer2 = new ESSCertIDv2(cert);
                     X509Chain chain = new X509Chain();
                     chain.Build(cert);
-                    cmsSigner.UnsignedAttributes.Add(new AsnEncodedData("1.2.840.113549.1.9.16.2.21", CertRefs.get(chain)));
-                    cmsSigner.UnsignedAttributes.Add(new AsnEncodedData("1.2.840.113549.1.9.16.2.22", CertCrls.get(chain)));
-                    cmsSigner.UnsignedAttributes.Add(new AsnEncodedData("1.2.840.113549.1.9.16.2.23", OtherCerts.get(chain)));
-                    cmsSigner.UnsignedAttributes.Add(new AsnEncodedData("1.2.840.113549.1.9.16.2.24", OtherCrls.get(chain)));
-                    //cmsSigner.DigestAlgorithm = new Oid("SHA256");
-                    
-                    
-                    string politika = "policy1";
-                    try
-                    {
-                        politika = FZRegistry.get("savedPolicy");
-                    }
-                    catch { }
 
-                    if (politika == "policy1")
-                    {
-                        cmsSigner.SignedAttributes.Add(new AsnEncodedData("1.2.840.113549.1.9.16.2.12", cer2.get()));
-                    }
-                    else {
-                        cmsSigner.SignedAttributes.Add(new AsnEncodedData("1.2.840.113549.1.9.16.2.47", cer2.get()));
-                    }
-
+                    /*
                     
 
-                    cmsSigner.SignedAttributes.Add(new AsnEncodedData("1.2.840.113549.1.9.16.2.15", getPolicy(false)));
-                    
-                    
-/**/
+
+                    /**/
+
+                    //cmsSigner.UnsignedAttributes.Add(new AsnEncodedData("1.2.840.113549.1.9.16.2.21", CertRefs.get(chain)));
+                    //cmsSigner.UnsignedAttributes.Add(new AsnEncodedData("1.2.840.113549.1.9.16.2.22", CertCrls.get(chain)));
+                    //cmsSigner.UnsignedAttributes.Add(new AsnEncodedData("1.2.840.113549.1.9.16.2.23", OtherCerts.get(chain)));
+                    //cmsSigner.UnsignedAttributes.Add(new AsnEncodedData("1.2.840.113549.1.9.16.2.24", OtherCrls.get(chain)));
+                    /**/
+                    //cmsSigner.SignedAttributes.Add(new AsnEncodedData("1.2.840.113549.1.9.16.2.47", cer2.get()));
+                    //cmsSigner.SignedAttributes.Add(new AsnEncodedData("1.2.840.113549.1.9.16.2.15", getPolicy(false)));
+
+
+                    /**/
                     signedCms.ComputeSignature(cmsSigner, false);
                     File.WriteAllBytes(certFile, getPolicy(true));
                     File.WriteAllBytes(sigFile, signedCms.Encode());
@@ -298,18 +264,22 @@ namespace FastZep3
             catch (CryptographicException e)
             {
                 var error = e.Message.ToString();
-                if (error == "Unknown error \" - 1073741275\".") {
+                if (error == "Unknown error \"-1073741275\".") {
                     error = "Nepodarilo sa načítať certifikát. odpojte a pripojte čítačku.";
+                }
+                if (error == "An internal error occurred.\r\n") {
+                    error = "Došlo ku chybe pri podpisovaní. Pravdepodobne nemáte pripojený USB kľúč alebo čítačku kariet.";
                 }
                 Console.WriteLine("Signing failed: " + error.ToString());
                 if (e.InnerException != null)
                 {
                     Console.WriteLine("Inner Exception: " + e.InnerException.ToString());
                 }
+                MessageBox.Show(error, "Chyba pri podpisovaní", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
             }catch (Exception exc)
             {
-                MessageBox.Show(exc.Message + "\n" + Marshal.GetLastWin32Error().ToString());
+                MessageBox.Show(exc.Message + "\n" + Marshal.GetLastWin32Error().ToString(), "Chyba pri podpisovaní", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             return false;
         
@@ -1433,7 +1403,7 @@ namespace FastZep3
             }
             else
             {
-                MessageBox.Show("Nastala chyba:" + Marshal.GetLastWin32Error().ToString());
+                MessageBox.Show("Nastala chyba pri podpisovaní. Súbor nebol podpísaný.","Chyba pri podpisovaní",MessageBoxButtons.OK,MessageBoxIcon.Error);
             }
         }
         private void selectSingleFile()
@@ -1609,6 +1579,8 @@ namespace FastZep3
             try
             {
                 Directory.Delete(FastZep.FastZepFolder, true);
+                bw.Dispose();
+                
             }
             catch{ }
         }
@@ -1707,18 +1679,163 @@ namespace FastZep3
         {
             
         }
-        private void createShortPolicy(ASNTree der) {
-            
+        private byte[] createShortPolicy(byte[] der,bool trim) {
+            try
+            {
+                File.WriteAllBytes("d:/policy.der", der);
+
+                var dercorelist = ASNNode.parse(der);
+                ASNNode dercore = (ASNNode) dercorelist[0];
+                
+                
+                ASNNode seq1;
+                ASNNode seq2;
+                ASNNode seq3;
+                ASNNode seq4;
+                ASNNode seq5;
+
+
+                ASNNode ret = new ASNNode(AsnTag.SEQUENCE);
+                ret.AppendChild(getPolicyId(dercore));
+                seq1 = new ASNNode(AsnTag.SEQUENCE);
+                seq2 = new ASNNode(AsnTag.SEQUENCE);
+                seq2.AppendChild(new ASNNode(new Oid("2.16.840.1.101.3.4.2.1")));
+                seq1.AppendChild(seq2);
+                seq1.AppendChild(getPolicyHash(dercore));
+                ret.AppendChild(seq1);
+
+
+                seq1 = new ASNNode(AsnTag.SEQUENCE);
+                seq2 = new ASNNode(AsnTag.SEQUENCE);
+                seq2.AppendChild(new ASNNode(new Oid("1.2.840.113549.1.9.16.5.2")));
+                seq3 = new ASNNode(AsnTag.SEQUENCE);
+
+                seq4 = new ASNNode(AsnTag.SEQUENCE);
+                string vydavatel = getPolicyVydavatel(dercore);
+                //vydavatel = "test";
+                //vydavatel = "C=SK, L=Bratislava, O=Narodny bezpecnostny urad, OU=Sekcia IBEP";
+                //vydavatel = "C=SK, L=Bratislava, O=Narodny bezpecnostny urad, OU=Sekcia IBEA";
+                seq4.AppendChild(new ASNNode(vydavatel, AsnTag.UTF8_STRING));
+
+                //seq3.AppendChild(new ASNNode(Encoding.UTF8.GetBytes(getPolicyVydavatel(dercore)), AsnTag.UTF8_STRING));
+                //seq3.AppendChild(new ASNNode(Encoding.UTF8.GetBytes(getPolicyVydavatel(dercore)), AsnTag.UTF8_STRING));
+                
+                seq5 = new ASNNode(AsnTag.SEQUENCE);
+                seq5.AppendChild(new ASNNode(1));
+                seq4.AppendChild(seq5);
+                /**/
+                
+                seq3.AppendChild(seq4);
+                seq3.AppendChild(getPolicyUsage(dercore));
+                seq2.AppendChild(seq3);
+
+                seq1.AppendChild(seq2);
+
+
+
+                seq2 = new ASNNode(AsnTag.SEQUENCE);
+                seq2.AppendChild(new ASNNode(new Oid("1.2.840.113549.1.9.16.5.1")));
+                seq2.AppendChild(new ASNNode(getPolicyUri(dercore).getValue(),AsnTag.IA5_STRING));
+                seq1.AppendChild(seq2);
+                /**/
+                ret.AppendChild(seq1);
+                if (!trim) return ret.get();
+                byte[] policy = ret.get();
+                byte[] policy2 = new byte[policy.Length - 4];
+                Buffer.BlockCopy(policy, 4, policy2, 0, policy2.Length);
+                return policy2;
+            }
+            catch (Exception exc) {
+                throw new Exception("Nepodarilo sa vytvoriť súbor policy. "+exc.Message);
+            }
+        }
+        
+        private ASNNode getPolicyUsage(ASNNode der)
+        {
+            return der.getChilds()[1].getChilds()[3];
+        }
+        private ASNNode getPolicyId(ASNNode der)
+        {
+            return der.getChilds()[1].getChilds()[0];
+        }
+        private ASNNode getPolicyHash(ASNNode der)
+        {
+            return der.getChilds()[der.getChilds().Length - 1];
+        }
+        private ASNNode getPolicyUri(ASNNode der)
+        {
+            return der.getChilds()[1].getChilds()[2].getChilds()[1];
+        }
+        private string getPolicyVydavatel(ASNNode der)
+        {
+            string ret = "";
+
+            string[,] convert = new string[,] {
+                {"2.5.4.43","I="},
+                {"2.5.4.42","G="},
+                {"2.5.4.12","T="},
+                {"2.5.4.11","OU="},
+                {"2.5.4.10","O="},
+                {"2.5.4.8","ST="},
+                {"2.5.4.7","L="},
+                {"2.5.4.6","C="},
+                {"2.5.4.4","SN="},
+                {"2.5.4.3","CN="}
+            };
+
+            for (int i = 0; i <= convert.GetUpperBound(0); i++) {
+                string code = convert[i, 0];
+                string add = convert[i, 1];
+
+                foreach (var asn in der.getChilds()[1].getChilds()[2].getChilds()[0].getChilds()[0].getChilds())
+                {
+                    var id = asn.getChilds()[0].getChilds()[0].getValue();
+                    var value = Encoding.UTF8.GetString(asn.getChilds()[0].getChilds()[1].getValue());
+                    if (MyOid.getName(new Oid(code)).SequenceEqual(id))
+                    {
+                        if (ret != "") ret += ", ";
+                        ret += add + value;
+                    }
+                }
+            }
+            return ret;
         }
         private void loadPolicy() {
 
             try
             {
                 var client = new WebClient();
-                var data = client.DownloadData("http://www.nbusr.sk/ipublisher/files/nbusr.sk/sign_policy/trustedlist.p7m");
-                File.WriteAllBytes("d:/data.p7m", data);
+                byte[] data = null;
+
+                try
+                {
+                    string trustedlistdata = FZRegistry.get("trustedlist.p7m");
+                    if (trustedlistdata == null) throw new Exception("Dont have trusted list");
+                    string[] trustedlistdataarr = trustedlistdata.Split(';');
+                    data = Convert.FromBase64String(trustedlistdataarr[1]);
+                    if (long.Parse(trustedlistdataarr[0]) < DateTime.Now.Ticks - (long) 24*3600*10000000) {
+                        throw new Exception("Trusted list is too old");
+                    }
+                }
+                catch{
+                    byte[] data2 = client.DownloadData("http://www.nbusr.sk/ipublisher/files/nbusr.sk/sign_policy/trustedlist.p7m");
+                    if (data2 != null)
+                    {
+                        try
+                        {
+
+                            data = data2;
+                            FZRegistry.set("trustedlist.p7m", DateTime.Now.Ticks.ToString() + ";" + Convert.ToBase64String(data2));
+                        }
+                        catch(Exception exc){
+                            MessageBox.Show("Chyba v stiahnutom súbore trustedlist.p7m: "+exc.Message);
+                        }
+                    }
+                }
                 SignedCms signedCms = new SignedCms();
                 signedCms.Decode(data);
+
+
                 var stream = new StreamReader(new MemoryStream(signedCms.ContentInfo.Content),System.Text.Encoding.UTF8);
                 string line = null;
                 byte[] file = null;
@@ -1726,17 +1843,21 @@ namespace FastZep3
                 string oid = "";
                 string FieldOfApplication = "";
                 ASNNode der = null;
+                string web = "";
                 while ((line = stream.ReadLine()) != null)
                 {
                     if (line.Substring(0, 5) == "FILE=") {
+                        
                         try
                         {
-                            file = client.DownloadData(line.Substring(5));
-                            var node = new ASNNode(file);
+                            web = line.Substring(5);
+                            
+
+                            
                             
                         }
                         catch (Exception exc) {
-                            
+                            MessageBox.Show(exc.Message);
                         }
                     }
                     if (line.Substring(0, 7) == "NOTICE=") {
@@ -1759,6 +1880,52 @@ namespace FastZep3
                         }
 
 
+                        // spracuj zaznam
+
+                        try
+                        {
+                            if (web == "") throw new Exception("Failed to parse trustedlist.p7m file");
+                            string name = web.Substring(web.LastIndexOf('/') + 1);
+                            string created = name.Substring(0, 8);
+                            var crdate = DateTime.ParseExact(created, "yyyyMMdd", System.Globalization.CultureInfo.InvariantCulture);
+                            var todate = DateTime.ParseExact(notafter.Substring(0, 8), "yyyyMMdd", System.Globalization.CultureInfo.InvariantCulture);
+                            if (crdate > DateTime.Now) continue;
+                            if (todate < DateTime.Now) continue;
+
+                            if (oid == "") {
+                                oid = name.Substring(0, name.Length - 4);
+                            }
+                            if (oid == "") throw new Exception("Failed to parse trustedlist.p7m file. Missing oid.");
+                            if (web.Substring(web.Length - ".der".Length) != ".der") continue;
+                            
+
+                            if (!FZRegistry.isSet(oid + ".short.der"))
+                            {
+                                file = client.DownloadData(web);
+                                //File.WriteAllBytes("d:/policy/" + name, file);
+                                FZRegistry.set(oid+".der", Convert.ToBase64String(file));
+                                //byte[] policy = createShortPolicy(file, false);
+                                //FZRegistry.set(oid + ".short.der", Convert.ToBase64String(policy));
+                                //File.WriteAllBytes("d:/policy/" + name + ".short.asn", policy);
+                            }
+                            else
+                            {
+                                //file = File.ReadAllBytes("d:/policy/" + name);
+                                //byte[] policy = createShortPolicy(file, false);
+                                //File.WriteAllBytes("d:/policy/" + name + ".short.asn", policy);
+                            }
+                            dataGridViewPolitiky.Rows.Add(new object[] { oid, FieldOfApplication, crdate.ToString("dd.mm.yyyy"), todate.ToString("dd.mm.yyyy") });
+
+
+                            web = "";
+                            oid = "";
+                            FieldOfApplication = "";
+                            notafter = "";
+
+                        }
+                        catch (Exception exc) {
+                            MessageBox.Show(exc.Message);
+                        }
                     }
                 }
                     //File.WriteAllBytes("d:/test.txt", signedCms.ContentInfo.Content);
@@ -1767,11 +1934,11 @@ namespace FastZep3
 
             }
             catch (Exception exc) {
-
+                MessageBox.Show("Chyba pri čítaní politiky: " + exc.Message);
             }
 
-            dataGridViewPolitiky.Rows.Add(new object[] { "policy1", "Zaručený elektronický podpis v súlade s legislatívou Slovenskej republiky.", "1.2.2010", "31.12.2010" });
-            dataGridViewPolitiky.Rows.Add(new object[] { "policy2", "Podpisová politika pre dokumenty podpísané ZEP v orgánoch štátnej správy.", "23.8.2010", "31.1.2014" });
+            //dataGridViewPolitiky.Rows.Add(new object[] { "policy1", "Zaručený elektronický podpis v súlade s legislatívou Slovenskej republiky.", "1.2.2010", "31.12.2010" });
+            //dataGridViewPolitiky.Rows.Add(new object[] { "policy2", "Podpisová politika pre dokumenty podpísané ZEP v orgánoch štátnej správy.", "23.8.2010", "31.1.2014" });
 
             try
             {

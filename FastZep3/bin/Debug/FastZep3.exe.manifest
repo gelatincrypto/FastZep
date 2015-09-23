@@ -43,14 +43,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="FastZep3.exe" size="339968">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="FastZep3.exe" size="343552">
       <assemblyIdentity name="FastZep3" version="1.0.0.0" publicKeyToken="59655398FF10FFA8" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>bFl/AuJiw9BpXNighx/qehRjlPFtGT834tRL4Fv4fMc=</dsig:DigestValue>
+        <dsig:DigestValue>FwcaTAEtNVkvlK2WdtAOg6M6O/XZDl/HuBCuNhjPepY=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

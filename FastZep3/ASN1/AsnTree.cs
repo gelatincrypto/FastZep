@@ -120,6 +120,19 @@ namespace FastZep3
             this.Type = AsnTag.OCTET_STRING;
             setValue(d);
         }
+        public ASNNode(string d, byte Type) {
+            if (Type == AsnTag.UTF8_STRING)
+            {
+                this.Type = Type;
+                UTF8Encoding u8 = new UTF8Encoding(false);
+                var val = u8.GetBytes(d);
+                setValue(val);
+            }
+            else {
+                this.Type = AsnTag.OCTET_STRING;
+                setValue(d);
+            }
+        }
         public ASNNode(byte Type)
         {
             this.Type = Type;
@@ -156,6 +169,9 @@ namespace FastZep3
             }
             else
             {
+                if (Type == AsnTag.UTF8_STRING) {
+                    int xx = 1;
+                }
                 MemoryStream ret = new MemoryStream();
                 ret.WriteByte(Type);
                 ret.Write(len, 0, len.Length);
@@ -182,12 +198,19 @@ namespace FastZep3
             childs.Add(child);
         }
         public void setValue(int d) {
-            data = new byte[4];
-            for (int i = 0; i <= 3; i++) data[i] = (byte)((d >> (i * 8)) & 0x000000FF);
-            
-            if (BitConverter.IsLittleEndian)
+            if (d < 256)
             {
-                Array.Reverse(data);
+                data = new byte[1];
+                data[0] = (byte)((d >> 0) & 0x000000FF);
+            }
+            else
+            {
+                data = new byte[4];
+                for (int i = 0; i <= 3; i++) data[i] = (byte)((d >> (i * 8)) & 0x000000FF);
+                if (BitConverter.IsLittleEndian)
+                {
+                    Array.Reverse(data);
+                }
             }
         }
         public void setValue(byte[] d)
@@ -210,26 +233,44 @@ namespace FastZep3
         {
             if (rawData != null) return rawData.Length;
 
+            int innerLength = 0;
             int ret = 0;
             if (data != null)
             {
-                ret += data.Length;
+                innerLength += data.Length;
             }
-            int innerLength = 0;
             foreach (ASNNode node in childs) {
-                innerLength += node.getLength();
+                int l = node.getLength();
+                innerLength += l;
+                if (innerLength == 0x0000011d) {
+                    int xx = 1;
+                }
             }
             if (includeHeader)
             {
                 ret += 1;
-                ret += ASNNode.getLengthBytes(innerLength).Length;
+                byte[] len = ASNNode.getLengthBytes(innerLength);
+                ret += len.Length;
             }
             ret += innerLength;
+            if (ret == 199) {
+                int zz = 1;
+            }
             return ret;
         }
         public static byte[] getLengthBytes(int length)
         {
+            /*
+            Stream xdata = new MemoryStream();
+            LipingShare.LCLib.Asn1Processor.Asn1Util.DERLengthEncode(xdata, (ulong) length);
+            xdata.Position = 0;
+            byte[] ret = new byte[xdata.Length];
+            xdata.Read(ret, 0, (int) xdata.Length);
+            return ret;
+            /**/
+
             byte[] ret = new byte[1];
+
             byte zero = (byte) 0;
             byte[] len = BitConverter.GetBytes(length);
             if (length < 0x80) {
@@ -267,6 +308,7 @@ namespace FastZep3
             
             }
             return ret;
+            /**/
         }
     }
     class MyOid{

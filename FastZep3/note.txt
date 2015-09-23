@@ -2,3 +2,11 @@ eID CSP Error: CPDestroyHash(hHash = 179) Pkcs11Exception: 1598565831
 Ch˝ba d·tum.
 eID CSP Error: CPDestroyHash(hHash = 179) Pkcs11Exception: 1634348487
 Podpis neobsahuje algoritmus ktor˝m sa to m· podpÌsaù.
+eID CSP Error: CPDestroyHash(hHash = 179) Pkcs11Exception: 1807625671
+chyba v 1.2.840.113549.1.9.16.2.22
+eID CSP Error: CPDestroyHash(hHash = 179) Pkcs11Exception: 1807625671
+alebo 1.2.840.113549.1.9.16.2.23
+eID CSP Error: CPDestroyHash(hHash = 179) Pkcs11Exception: 1807625671
+alebo 1.2.840.113549.1.9.16.2.24
+
+eID CSP Error: CPDestroyHash(hHash = 179) Pkcs11Exception: 1455631815

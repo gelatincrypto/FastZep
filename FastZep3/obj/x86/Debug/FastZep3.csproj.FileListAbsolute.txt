@@ -33,3 +33,6 @@ C:\dokumenty\Visual Studio 2010\Projects\FastZep3\bin\x86\Debug\vjslib.dll
 C:\dokumenty\Visual Studio 2010\Projects\FastZep3\obj\x86\Debug\FastZep3.csproj.GenerateResource.Cache
 C:\dokumenty\Visual Studio 2010\Projects\FastZep3\obj\x86\Debug\FastZep3.exe.manifest
 C:\dokumenty\Visual Studio 2010\Projects\FastZep3\obj\x86\Debug\FastZep3.application
+C:\Users\Ludovit Scholtz\Documents\Visual Studio 2015\Projects\FastZep\FastZep3\bin\x86\Debug\FastZep3.exe.config
+C:\Users\Ludovit Scholtz\Documents\Visual Studio 2015\Projects\FastZep\FastZep3\obj\x86\Debug\FastZep3.exe
+C:\Users\Ludovit Scholtz\Documents\Visual Studio 2015\Projects\FastZep\FastZep3\obj\x86\Debug\FastZep3.pdb

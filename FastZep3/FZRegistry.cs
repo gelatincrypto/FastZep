@@ -8,6 +8,19 @@ namespace FastZep3
 {
     class FZRegistry
     {
+        public static bool isSet(string key)
+        {
+            try
+            {
+                if (get(key) != "") return true;
+            }
+            catch
+            {
+                return false;
+            }
+            return false;
+
+        }
         public static string get(string key)
         {
             RegistryKey key1 = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\FastZep\FastZep3");

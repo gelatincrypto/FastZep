@@ -141,21 +141,23 @@ Email: lipingshare@yahoo.com
 
         public static int DERLengthEncode(Stream xdata, ulong length)
         {
-            int num = 0;
-            if (length <= 0x7fL)
+            int i = 0;
+            if (length <= 0x7f)
             {
-                xdata.WriteByte((byte) length);
-                num++;
-                return num;
+                xdata.WriteByte((byte)length);
+                i++;
             }
-            xdata.WriteByte((byte) (BytePrecision(length) | 0x80));
-            num++;
-            for (int i = BytePrecision(length); i > 0; i--)
+            else
             {
-                xdata.WriteByte((byte) (length >> ((i - 1) * 8)));
-                num++;
+                xdata.WriteByte((byte)(BytePrecision(length) | 0x80));
+                i++;
+                for (int j = BytePrecision((ulong)length); j > 0; --j)
+                {
+                    xdata.WriteByte((byte)(length >> (j - 1) * 8));
+                    i++;
+                }
             }
-            return num;
+            return i;
         }
 
         public static string FormatString(string inStr, int lineLen, int groupLen)
@@ -585,6 +587,10 @@ Email: lipingshare@yahoo.com
             }
             return new string(chArray);
         }
+
+
+
+
 
     }
 }

@@ -69,3 +69,39 @@ C:\Users\Ludovit Scholtz\Documents\Visual Studio 2015\Projects\FastZep3\bin\Debu
 C:\Users\Ludovit Scholtz\Documents\Visual Studio 2015\Projects\FastZep3\bin\Debug\vjslib.dll
 C:\Users\Ludovit Scholtz\Documents\Visual Studio 2015\Projects\FastZep3\obj\Debug\FastZep3.exe.manifest
 C:\Users\Ludovit Scholtz\Documents\Visual Studio 2015\Projects\FastZep3\obj\Debug\FastZep3.application
+c:\dokumenty\Visual Studio 2015\Projects\FastZep\FastZep3\bin\Debug\FastZep3.exe.config
+c:\dokumenty\Visual Studio 2015\Projects\FastZep\FastZep3\obj\Debug\FastZep3.exe
+c:\dokumenty\Visual Studio 2015\Projects\FastZep\FastZep3\obj\Debug\FastZep3.pdb
+c:\dokumenty\Visual Studio 2015\Projects\FastZep\FastZep3\bin\Debug\Properties\Resources.resx
+c:\dokumenty\Visual Studio 2015\Projects\FastZep\FastZep3\bin\Debug\Properties\Resources.Designer.cs
+c:\dokumenty\Visual Studio 2015\Projects\FastZep\FastZep3\bin\Debug\FastZep3.exe.manifest
+c:\dokumenty\Visual Studio 2015\Projects\FastZep\FastZep3\bin\Debug\FastZep3.application
+c:\dokumenty\Visual Studio 2015\Projects\FastZep\FastZep3\bin\Debug\FastZep3.exe
+c:\dokumenty\Visual Studio 2015\Projects\FastZep\FastZep3\bin\Debug\FastZep3.pdb
+c:\dokumenty\Visual Studio 2015\Projects\FastZep\FastZep3\bin\Debug\ICSharpCode.SharpZipLib.dll
+c:\dokumenty\Visual Studio 2015\Projects\FastZep\FastZep3\bin\Debug\vjslib.dll
+c:\dokumenty\Visual Studio 2015\Projects\FastZep\FastZep3\obj\Debug\FastZep3.csprojResolveAssemblyReference.cache
+c:\dokumenty\Visual Studio 2015\Projects\FastZep\FastZep3\obj\Debug\FastZep3.CrlSecurity.Properties.Resources.resources
+c:\dokumenty\Visual Studio 2015\Projects\FastZep\FastZep3\obj\Debug\FastZep3.Form1.resources
+c:\dokumenty\Visual Studio 2015\Projects\FastZep\FastZep3\obj\Debug\FastZep3.Properties.Resources.resources
+c:\dokumenty\Visual Studio 2015\Projects\FastZep\FastZep3\obj\Debug\FastZep3.csproj.GenerateResource.Cache
+c:\dokumenty\Visual Studio 2015\Projects\FastZep\FastZep3\obj\Debug\FastZep3.exe.manifest
+c:\dokumenty\Visual Studio 2015\Projects\FastZep\FastZep3\obj\Debug\FastZep3.application
+C:\Users\Ludovit Scholtz\Documents\Visual Studio 2015\Projects\FastZep\FastZep3\bin\Debug\FastZep3.exe.config
+C:\Users\Ludovit Scholtz\Documents\Visual Studio 2015\Projects\FastZep\FastZep3\obj\Debug\FastZep3.exe
+C:\Users\Ludovit Scholtz\Documents\Visual Studio 2015\Projects\FastZep\FastZep3\obj\Debug\FastZep3.pdb
+C:\Users\Ludovit Scholtz\Documents\Visual Studio 2015\Projects\FastZep\FastZep3\obj\Debug\FastZep3.csprojResolveAssemblyReference.cache
+C:\Users\Ludovit Scholtz\Documents\Visual Studio 2015\Projects\FastZep\FastZep3\obj\Debug\FastZep3.CrlSecurity.Properties.Resources.resources
+C:\Users\Ludovit Scholtz\Documents\Visual Studio 2015\Projects\FastZep\FastZep3\obj\Debug\FastZep3.Form1.resources
+C:\Users\Ludovit Scholtz\Documents\Visual Studio 2015\Projects\FastZep\FastZep3\obj\Debug\FastZep3.Properties.Resources.resources
+C:\Users\Ludovit Scholtz\Documents\Visual Studio 2015\Projects\FastZep\FastZep3\obj\Debug\FastZep3.csproj.GenerateResource.Cache
+C:\Users\Ludovit Scholtz\Documents\Visual Studio 2015\Projects\FastZep\FastZep3\bin\Debug\Properties\Resources.resx
+C:\Users\Ludovit Scholtz\Documents\Visual Studio 2015\Projects\FastZep\FastZep3\bin\Debug\Properties\Resources.Designer.cs
+C:\Users\Ludovit Scholtz\Documents\Visual Studio 2015\Projects\FastZep\FastZep3\bin\Debug\FastZep3.exe.manifest
+C:\Users\Ludovit Scholtz\Documents\Visual Studio 2015\Projects\FastZep\FastZep3\bin\Debug\FastZep3.application
+C:\Users\Ludovit Scholtz\Documents\Visual Studio 2015\Projects\FastZep\FastZep3\bin\Debug\FastZep3.exe
+C:\Users\Ludovit Scholtz\Documents\Visual Studio 2015\Projects\FastZep\FastZep3\bin\Debug\FastZep3.pdb
+C:\Users\Ludovit Scholtz\Documents\Visual Studio 2015\Projects\FastZep\FastZep3\bin\Debug\ICSharpCode.SharpZipLib.dll
+C:\Users\Ludovit Scholtz\Documents\Visual Studio 2015\Projects\FastZep\FastZep3\bin\Debug\vjslib.dll
+C:\Users\Ludovit Scholtz\Documents\Visual Studio 2015\Projects\FastZep\FastZep3\obj\Debug\FastZep3.exe.manifest
+C:\Users\Ludovit Scholtz\Documents\Visual Studio 2015\Projects\FastZep\FastZep3\obj\Debug\FastZep3.application
